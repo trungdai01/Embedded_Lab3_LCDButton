@@ -63,6 +63,10 @@ void test_LedY1();
 void test_7seg();
 void test_button();
 void test_lcd();
+void test_leftSet();
+void test_rightSet();
+void change_mode();
+void mode2();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -74,6 +78,10 @@ void test_lcd();
   * @brief  The application entry point.
   * @retval int
   */
+uint8_t mode = 0;
+uint8_t red_seconds = 5;
+uint8_t green_seconds = 3;
+uint8_t yellow_seconds = 1;
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -104,18 +112,34 @@ int main(void)
   /* USER CODE BEGIN 2 */
   system_init();
   lcd_Clear(WHITE);
-  test_lcd();
+//  test_lcd();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
   while (1)
   {
 	  while(!flag_timer2);
 	  flag_timer2 = 0;
 	  button_Scan();
 	  test_button();
+//	  test_LedDebug();
+//	  test_LedY0();
+//	  test_LedY1();
+	  if(mode == 0){
 
+		  test_leftSet();
+//		  test_rightSet();
+	  }
+	  if(mode == 1){
+		  mode2();
+	  }
+//	  test_7seg();
+//	  if(button_count[0]%40 == 1)
+//	  {
+//		  HAL_GPIO_TogglePin(DEBUG_LED_GPIO_Port, DEBUG_LED_Pin);
+//	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -182,6 +206,12 @@ void system_init(){
 uint8_t count_led_debug = 0;
 uint8_t count_led_Y0 = 0;
 uint8_t count_led_Y1 = 0;
+int count_left = 0;
+uint8_t count_right = 0;
+uint8_t left_status = 0;
+uint8_t count_red_editing = 0;
+uint8_t editing_red_seconds = 0;
+
 
 void test_LedDebug(){
 	count_led_debug = (count_led_debug + 1)%20;
@@ -215,19 +245,133 @@ void test_7seg(){
 	led7_SetDigit(7, 3, 0);
 }
 void test_button(){
-	for(int i = 0; i < 16; i++){
-		if(button_count[i] == 1){
-			lcd_ShowIntNum(140, 105, i, 2, BRED, WHITE, 32);
-		}
+//	for(int i = 0; i < 16; i++){
+		if(button_count[0] == 1){
+			change_mode();
+//			lcd_ShowIntNum(140, 105, i, 2, BRED, WHITE, 32);
+//			if (i > 9)
+//			{
+//				led7_SetDigit(1, 0, 0);
+//				led7_SetDigit(i%10, 1, 0);
+//			}
+//			else{
+//				led7_SetDigit(0, 0, 0);
+//				led7_SetDigit(i, 1, 0);
+//			}
+//		}
 	}
 }
 void test_lcd(){
 	lcd_Fill(0, 0, 240, 20, BLUE);
 	lcd_StrCenter(0, 2, "Hello World !!!", RED, BLUE, 16, 1);
-	lcd_ShowStr(20, 30, "Test lcd screen", WHITE, RED, 24, 0);
-	lcd_DrawCircle(60, 120, GREEN, 40, 1);
-	lcd_DrawCircle(160, 120, BRED, 40, 0);
-	lcd_ShowPicture(80, 200, 90, 90, gImage_logo);
+//	lcd_ShowStr(20, 30, "Test lcd screen", WHITE, RED, 24, 0);
+	lcd_DrawCircle(60, 120, GREEN, 20, 1);
+	lcd_DrawCircle(160, 120, RED, 20, 1);
+	lcd_DrawCircle(60, 200, GREEN, 20, 1);
+	lcd_DrawCircle(160, 200, RED, 20, 1);
+	lcd_DrawCircle(60, 280, GREEN, 20, 1);
+	lcd_DrawCircle(160, 280, RED, 20, 1);
+//	lcd_ShowPicture(80, 200, 90, 90, gImage_logo);
+}
+
+
+
+void test_leftSet()
+{
+
+	int total_time_count = red_seconds*20 + green_seconds*20 + yellow_seconds*20;
+	int red_count = red_seconds*20;
+	int green_count = green_seconds*20;
+	lcd_ShowIntNum(160, 2, red_count, 4, BRED, WHITE, 32);
+	lcd_ShowIntNum(100, 2, total_time_count, 4, BRED, WHITE, 32);
+
+	count_left = (count_left + 1) % total_time_count;
+lcd_ShowIntNum(50, 2, count_left, 4, BRED, WHITE, 32);
+	if(count_left < red_count)
+	{
+		lcd_DrawCircle(60, 200, WHITE, 20, 1);
+		lcd_DrawCircle(60, 120, RED, 20, 1);
+		lcd_DrawCircle(60, 200, YELLOW, 20, 0);
+		lcd_DrawCircle(60, 280, GREEN, 20, 0);
+		return;
+	}
+	if(count_left >= red_count && count_left < (red_count + green_count)){
+		lcd_DrawCircle(60, 120, WHITE, 20, 1);
+		lcd_DrawCircle(60, 120, RED, 20, 0);
+		lcd_DrawCircle(60, 200, YELLOW, 20, 0);
+		lcd_DrawCircle(60, 280, GREEN, 20, 1);
+		return;
+	}
+	lcd_DrawCircle(60, 280, WHITE, 20, 1);
+	lcd_DrawCircle(60, 120, RED, 20, 0);
+	lcd_DrawCircle(60, 200, YELLOW, 20, 1);
+	lcd_DrawCircle(60, 280, GREEN, 20, 0);
+}
+
+void test_rightSet()
+{
+	uint8_t total_time_count = red_seconds*20 + green_seconds*20 + yellow_seconds*20;
+		uint8_t green_count = green_seconds*20;
+		uint8_t yellow_count = yellow_seconds*20;
+	count_right = (count_right + 1) % total_time_count;
+		if(count_right < green_count)
+		{
+			lcd_DrawCircle(160, 120, WHITE, 20, 1);
+			lcd_DrawCircle(160, 120, RED, 20, 0);
+			lcd_DrawCircle(160, 200, YELLOW, 20, 0);
+			lcd_DrawCircle(160, 280, GREEN, 20, 1);
+			return;
+		}
+		if(count_right >= green_count && count_right < (green_count + yellow_count)){
+			lcd_DrawCircle(160, 280, WHITE, 20, 1);
+			lcd_DrawCircle(160, 120, RED, 20, 0);
+			lcd_DrawCircle(160, 200, YELLOW, 20, 1);
+			lcd_DrawCircle(160, 280, GREEN, 20, 0);
+			return;
+		}
+		lcd_DrawCircle(160, 200, WHITE, 20, 1);
+		lcd_DrawCircle(160, 120, RED, 20, 1);
+		lcd_DrawCircle(160, 200, YELLOW, 20, 0);
+		lcd_DrawCircle(160, 280, GREEN, 20, 0);
+}
+
+void change_mode(){
+	mode = (mode + 1)%4;
+	if(mode == 0){
+			count_left = 0;
+			count_right = 0;
+		}
+	if(mode == 1){
+		lcd_DrawCircle(60, 200, WHITE, 20, 1);
+		lcd_DrawCircle(60, 120, WHITE, 20, 1);
+		lcd_DrawCircle(60, 280, WHITE, 20, 1);
+		lcd_DrawCircle(160, 120, WHITE, 20, 1);
+		lcd_DrawCircle(160, 200, WHITE, 20, 1);
+		lcd_DrawCircle(160, 280, WHITE, 20, 0);
+		editing_red_seconds = red_seconds;
+	}
+}
+
+
+void mode2(){
+	count_red_editing = (count_red_editing+1)%10;
+	if(count_red_editing == 5){
+		lcd_DrawCircle(160, 120, RED, 20, 1);
+		lcd_DrawCircle(60, 120, RED, 20, 1);
+	}
+	if(count_red_editing == 0){
+			lcd_DrawCircle(160, 120, WHITE, 20, 0);
+			lcd_DrawCircle(60, 120, WHITE, 20, 0);
+		}
+
+	if(button_count[1] == 1){
+		if(editing_red_seconds == 99) editing_red_seconds = 1;
+		else editing_red_seconds++;
+	}
+	if(button_count[2] == 1){
+		red_seconds = editing_red_seconds;
+	}
+	lcd_ShowIntNum(0, 2, editing_red_seconds, 2, BRED, WHITE, 32);
 }
 /* USER CODE END 4 */
 
