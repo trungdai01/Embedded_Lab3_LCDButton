@@ -31,6 +31,9 @@
 #include "button.h"
 #include "lcd.h"
 #include "picture.h"
+#include "global.h"
+#include "fsm_simple_buttons_run.h"
+#include "global.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -122,19 +125,20 @@ int main(void)
   {
 	  while(!flag_timer2);
 	  flag_timer2 = 0;
-	  button_Scan();
-	  test_button();
-//	  test_LedDebug();
-//	  test_LedY0();
-//	  test_LedY1();
-	  if(mode == 0){
+	  fsm_simple_buttons_run();
+// 	  button_Scan();
+// 	  test_button();
+// //	  test_LedDebug();
+// //	  test_LedY0();
+// //	  test_LedY1();
+// 	  if(mode == 0){
 
-		  test_leftSet();
-//		  test_rightSet();
-	  }
-	  if(mode == 1){
-		  mode2();
-	  }
+// 		  test_leftSet();
+// //		  test_rightSet();
+// 	  }
+// 	  if(mode == 1){
+// 		  mode2();
+// 	  }
 //	  test_7seg();
 //	  if(button_count[0]%40 == 1)
 //	  {
@@ -278,7 +282,6 @@ void test_lcd(){
 
 void test_leftSet()
 {
-
 	int total_time_count = red_seconds*20 + green_seconds*20 + yellow_seconds*20;
 	int red_count = red_seconds*20;
 	int green_count = green_seconds*20;
@@ -286,7 +289,7 @@ void test_leftSet()
 	lcd_ShowIntNum(100, 2, total_time_count, 4, BRED, WHITE, 32);
 
 	count_left = (count_left + 1) % total_time_count;
-lcd_ShowIntNum(50, 2, count_left, 4, BRED, WHITE, 32);
+	lcd_ShowIntNum(50, 2, count_left, 4, BRED, WHITE, 32);
 	if(count_left < red_count)
 	{
 		lcd_DrawCircle(60, 200, WHITE, 20, 1);
@@ -313,7 +316,7 @@ void test_rightSet()
 	uint8_t total_time_count = red_seconds*20 + green_seconds*20 + yellow_seconds*20;
 		uint8_t green_count = green_seconds*20;
 		uint8_t yellow_count = yellow_seconds*20;
-	count_right = (count_right + 1) % total_time_count;
+		count_right = (count_right + 1) % total_time_count;
 		if(count_right < green_count)
 		{
 			lcd_DrawCircle(160, 120, WHITE, 20, 1);
@@ -340,7 +343,7 @@ void change_mode(){
 	if(mode == 0){
 			count_left = 0;
 			count_right = 0;
-		}
+	}
 	if(mode == 1){
 		lcd_DrawCircle(60, 200, WHITE, 20, 1);
 		lcd_DrawCircle(60, 120, WHITE, 20, 1);
