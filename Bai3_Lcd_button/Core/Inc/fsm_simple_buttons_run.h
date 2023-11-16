@@ -3,6 +3,11 @@
 
 #include "global.h"
 #include "traffic_lights.h"
+#include "button.h"
+#include "spi.h"
+#include "tim.h"
+#include "gpio.h"
+#include "fsmc.h"
 
 void fsm_simple_buttons_run(void);
 

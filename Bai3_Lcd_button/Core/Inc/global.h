@@ -7,14 +7,19 @@
 
 enum ModeState {INIT,MODE_1,MODE_2, MODE_3, MODE_4};
 
-enum TrafficLightState{RED,GREEN, YELLOW};
+extern enum TrafficLightState {RED_STATE,GREEN_STATE, YELLOW_STATE};
 
 extern enum ModeState MODE;
 extern enum TrafficLightState TRAFFIC_LIGHT_EDITING;
 
+extern int 	one_second_count;
+
 extern int red_count;
 extern int green_count;
 extern int yellow_count;
+
+extern int first_traffic_lights_count_down;
+extern int second_traffic_lights_count_down;
 
 extern int editing_red_seconds;
 extern int editing_green_seconds;

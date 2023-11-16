@@ -7,3 +7,6 @@
 void display_first_traffic_lights(void);
 void display_second_traffic_lights(void);
 void display_editing_lights(void);
+void turn_off_lights(void);
+
+#endif

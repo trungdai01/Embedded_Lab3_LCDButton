@@ -33,7 +33,6 @@
 #include "picture.h"
 #include "global.h"
 #include "fsm_simple_buttons_run.h"
-#include "global.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -126,7 +125,7 @@ int main(void)
 	  while(!flag_timer2);
 	  flag_timer2 = 0;
 	  fsm_simple_buttons_run();
-// 	  button_Scan();
+
 // 	  test_button();
 // //	  test_LedDebug();
 // //	  test_LedY0();
@@ -214,7 +213,6 @@ int count_left = 0;
 uint8_t count_right = 0;
 uint8_t left_status = 0;
 uint8_t count_red_editing = 0;
-uint8_t editing_red_seconds = 0;
 
 
 void test_LedDebug(){
@@ -249,20 +247,20 @@ void test_7seg(){
 	led7_SetDigit(7, 3, 0);
 }
 void test_button(){
-//	for(int i = 0; i < 16; i++){
-		if(button_count[0] == 1){
-			change_mode();
-//			lcd_ShowIntNum(140, 105, i, 2, BRED, WHITE, 32);
-//			if (i > 9)
-//			{
-//				led7_SetDigit(1, 0, 0);
-//				led7_SetDigit(i%10, 1, 0);
-//			}
-//			else{
-//				led7_SetDigit(0, 0, 0);
-//				led7_SetDigit(i, 1, 0);
-//			}
-//		}
+	for(int i = 0; i < 16; i++){
+		if(button_count[i] == 1){
+//			change_mode();
+			lcd_ShowIntNum(140, 105, i, 2, BRED, WHITE, 32);
+			if (i > 9)
+			{
+				led7_SetDigit(1, 0, 0);
+				led7_SetDigit(i%10, 1, 0);
+			}
+			else{
+				led7_SetDigit(0, 0, 0);
+				led7_SetDigit(i, 1, 0);
+			}
+		}
 	}
 }
 void test_lcd(){
@@ -356,26 +354,26 @@ void change_mode(){
 }
 
 
-void mode2(){
-	count_red_editing = (count_red_editing+1)%10;
-	if(count_red_editing == 5){
-		lcd_DrawCircle(160, 120, RED, 20, 1);
-		lcd_DrawCircle(60, 120, RED, 20, 1);
-	}
-	if(count_red_editing == 0){
-			lcd_DrawCircle(160, 120, WHITE, 20, 0);
-			lcd_DrawCircle(60, 120, WHITE, 20, 0);
-		}
-
-	if(button_count[1] == 1){
-		if(editing_red_seconds == 99) editing_red_seconds = 1;
-		else editing_red_seconds++;
-	}
-	if(button_count[2] == 1){
-		red_seconds = editing_red_seconds;
-	}
-	lcd_ShowIntNum(0, 2, editing_red_seconds, 2, BRED, WHITE, 32);
-}
+//void mode2(){
+//	count_red_editing = (count_red_editing+1)%10;
+//	if(count_red_editing == 5){
+//		lcd_DrawCircle(160, 120, RED, 20, 1);
+//		lcd_DrawCircle(60, 120, RED, 20, 1);
+//	}
+//	if(count_red_editing == 0){
+//			lcd_DrawCircle(160, 120, WHITE, 20, 0);
+//			lcd_DrawCircle(60, 120, WHITE, 20, 0);
+//		}
+//
+//	if(button_count[1] == 1){
+//		if(editing_red_seconds == 99) editing_red_seconds = 1;
+//		else editing_red_seconds++;
+//	}
+//	if(button_count[2] == 1){
+//		red_seconds = editing_red_seconds;
+//	}
+//	lcd_ShowIntNum(0, 2, editing_red_seconds, 2, BRED, WHITE, 32);
+//}
 /* USER CODE END 4 */
 
 /**
