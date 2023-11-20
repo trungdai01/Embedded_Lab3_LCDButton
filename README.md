@@ -1,3 +1,7 @@
+## Link video
+https://drive.google.com/file/d/1v6fDjxRchpRwXh8Y8PgFcu2JkwL9p75P/view?usp=sharing
+
+
 ## BKIT ARM 4 - LAB 03: Khảo sát LCD TOUCH và Button
 
 - Biết cách cấu hình và sử dụng timer trên kit thí nghiệm;
